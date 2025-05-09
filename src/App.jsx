@@ -1,4 +1,4 @@
-import { useState, useEffect, cache } from 'react'
+import { useState, useEffect, createContext, useContext } from 'react'
 import './App.css'
 
 function App() {
@@ -6,6 +6,11 @@ function App() {
   const [loadingSpinner, setloadingSpinner] = useState(false)
   const [error, setError] = useState(false)
   const [searchValue, setSearchValue] = useState("")
+
+  const ThemeContext = createContext("light-mode")
+  const [theme, setTheme] = useState("light-mode")
+  
+  // const { theme, setTheme } = useContext(ThemeContext)
 
   const filteredUsers = users.filter(user => {
     const fullName = user.name.first + " " + user.name.last
@@ -40,43 +45,50 @@ function App() {
     setSearchValue(e.target.value)
   }
 
-  return (
-    <>
-      {
-        loadingSpinner ? <p>LOADING DATA!</p> 
-        : 
-          <main>
-            <h1>Users App</h1>
-            <p>Grab random users from the RandomUsers API and filter them</p>
-            {
-              error ? <p>! There was an error retrieving users !</p> :
-              <div className="list-container">
-                <form action="" >
-                  <input 
-                    type="text" 
-                    placeholder="search for user" 
-                    value={searchValue}
-                    onChange={handleSearchBarChange}
-                  />
-                  {/* <button type="submit">submit</button> */}
-                </form>
-                <ul>
-                  {
-                    filteredUsers.map((user, idx) => (
-                      <li key={idx}>
-                        <img src={user.picture.large} alt={`${user.name.first} ${user.name.last} photo`} />
-                        <h3>{`${user.name.first} ${user.name.last}`}</h3>
-                        <p>{user.email}</p>
-                      </li>
-                    ))
-                  }
-                </ul>
-              </div>
+  function userListItemTheme(){
+    if (theme === "light-mode") return "dark-mode"
+    if (theme === "dark-mode") return "light-mode"
+  }
 
-            }
-        </main>
-      }
-    </>
+  return (
+    <ThemeContext.Provider value={{theme, setTheme}}>
+      <>
+        {
+          loadingSpinner ? <p>LOADING DATA!</p> 
+          : 
+            <main className={theme}>
+              <h1>Users App</h1>
+              <p>Grab random users from the RandomUsers API and filter them</p>
+              {
+                error ? <p>! There was an error retrieving users !</p> :
+                <div className="theme list-container">
+                  <form action="" >
+                    <input 
+                      type="text" 
+                      placeholder="search for user" 
+                      value={searchValue}
+                      onChange={handleSearchBarChange}
+                    />
+                    {/* <button type="submit">submit</button> */}
+                  </form>
+                  <ul className={theme}>
+                    {
+                      filteredUsers.map((user, idx) => (
+                        <li className={userListItemTheme()} key={idx}>
+                          <img src={user.picture.large} alt={`${user.name.first} ${user.name.last} photo`} />
+                          <h3>{`${user.name.first} ${user.name.last}`}</h3>
+                          <p>{user.email}</p>
+                        </li>
+                      ))
+                    }
+                  </ul>
+                </div>
+
+              }
+          </main>
+        }
+      </>
+    </ThemeContext.Provider>
   )
 }
 
