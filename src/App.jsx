@@ -11,7 +11,13 @@ function App() {
   const [searchValue, setSearchValue] = useState("")
   const [theme, setTheme] = useState("light-mode")
 
-  useEffect(() => {getUsers(setloadingSpinner, setUsers, setloadingSpinner, setError, error)}, [])
+  useEffect(() => {
+    getUsers(setloadingSpinner, setUsers, setloadingSpinner, setError, error)
+  }, [])
+  
+  useEffect(() => {
+    document.body.className = theme
+  }, [theme])
 
   function handleSearchBarChange(e){
     setSearchValue(e.target.value)

@@ -2,7 +2,7 @@ import { useContext } from "react"
 import ThemeContext from "../context/ThemeContext"
 import UserListItem from "./UserListItem"
 
-export default function UsersList({users, searchValue, handleSearchBarChange, userListItemTheme}){
+export default function UsersList({users, searchValue, handleSearchBarChange, userListItemTheme, returnOppositeTheme}){
   const {theme} = useContext(ThemeContext)
 
   const filteredUsers = users.filter(user => {
@@ -14,6 +14,7 @@ export default function UsersList({users, searchValue, handleSearchBarChange, us
     <div className={ theme + " list-container" }>
       <form action="" >
         <input 
+          className={ returnOppositeTheme(theme) }
           type="text" 
           placeholder="search for user" 
           value={searchValue}
@@ -24,6 +25,7 @@ export default function UsersList({users, searchValue, handleSearchBarChange, us
         {
           filteredUsers.map((user, idx) => (
             <UserListItem 
+              key={idx}
               idx={idx}
               user={user}
               userListItemTheme={userListItemTheme}

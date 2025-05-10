@@ -1,5 +1,4 @@
 main {
-  /* background-color: red; */
   width: 100%;
   margin: 0 auto;
   display: flex;
@@ -11,6 +10,59 @@ main {
 
 main h1, main p {
   margin: 10px;
+}
+
+input {
+  width: 500px;
+  height: 50px;
+  padding-left: 5px;
+  border: none;
+  border-radius: 5px;
+}
+
+input::placeholder {
+  text-transform: capitalize;
+}
+
+.btn {
+  margin: 10px auto;
+  width: 100px;
+  padding: 5px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  text-transform: capitalize;
+}
+
+.dark-mode {
+  background-color: #111827;
+  color: #f9fafb;
+}
+
+.light-mode {
+  background-color: #f9fafb;
+  color: #111827;
+}
+
+.button-dark-mode {
+  background-color: #111827;
+  color: #f9fafb;
+}
+
+.button-light-mode {
+  background-color: #f9fafb;
+  color: #111827;
+}
+
+.dark-mode::placeholder {
+  /* background-color: #111827; */
+  color: #f9fafb;
+}
+
+.light-mode::placeholder {
+  /* background-color: #f9fafb; */
+  color: #111827;
 }
 
 .loading-alert {
@@ -52,7 +104,7 @@ li {
   justify-content: space-evenly;
   border: none;
   border-radius: 30px;
-  font-size: 13px;
+  font-size: 12px;
 }
 
 li img {
