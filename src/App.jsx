@@ -1,4 +1,7 @@
-import { useState, useEffect, createContext, useContext } from 'react'
+import { useState, useEffect, useContext } from 'react'
+import UsersMain from './components/UsersMain.jsx'
+import ThemeContext from './context/ThemeContext'
+import getUsers from './utils/getUsers.js'
 import './App.css'
 
 function App() {
@@ -6,40 +9,9 @@ function App() {
   const [loadingSpinner, setloadingSpinner] = useState(false)
   const [error, setError] = useState(false)
   const [searchValue, setSearchValue] = useState("")
-
-  const ThemeContext = createContext("light-mode")
   const [theme, setTheme] = useState("light-mode")
-  
-  // const { theme, setTheme } = useContext(ThemeContext)
 
-  const filteredUsers = users.filter(user => {
-    const fullName = user.name.first + " " + user.name.last
-    return fullName.toLowerCase().includes(searchValue.toLowerCase())
-  })
-
-  useEffect(() => {
-    async function getUsers() {
-      try {
-        const res = await fetch("https://randomuser.me/api/?results=50")
-        setloadingSpinner(true)
-        if(!res.ok){
-          throw new Error(`HTTP ERROR! Status: ${res.status}`)
-        }
-        const data = await res.json()
-
-        setUsers(data.results)
-        setloadingSpinner(false)
-        if (!error) setError("")
-
-
-      } catch (error) {
-        console.log(error)
-        setError(true)
-        setloadingSpinner(false)
-      }
-    }
-    getUsers()
-  }, [])
+  useEffect(() => {getUsers(setloadingSpinner, setUsers, setloadingSpinner, setError, error)}, [])
 
   function handleSearchBarChange(e){
     setSearchValue(e.target.value)
@@ -54,38 +26,16 @@ function App() {
     <ThemeContext.Provider value={{theme, setTheme}}>
       <>
         {
-          loadingSpinner ? <p>LOADING DATA!</p> 
-          : 
-            <main className={theme}>
-              <h1>Users App</h1>
-              <p>Grab random users from the RandomUsers API and filter them</p>
-              {
-                error ? <p>! There was an error retrieving users !</p> :
-                <div className="theme list-container">
-                  <form action="" >
-                    <input 
-                      type="text" 
-                      placeholder="search for user" 
-                      value={searchValue}
-                      onChange={handleSearchBarChange}
-                    />
-                    {/* <button type="submit">submit</button> */}
-                  </form>
-                  <ul className={theme}>
-                    {
-                      filteredUsers.map((user, idx) => (
-                        <li className={userListItemTheme()} key={idx}>
-                          <img src={user.picture.large} alt={`${user.name.first} ${user.name.last} photo`} />
-                          <h3>{`${user.name.first} ${user.name.last}`}</h3>
-                          <p>{user.email}</p>
-                        </li>
-                      ))
-                    }
-                  </ul>
-                </div>
-
-              }
-          </main>
+          loadingSpinner 
+          ? <h1 className={theme + " loading-alert"}>LOADING DATA!</h1> 
+          : <UsersMain 
+              users={users}
+              searchValue={searchValue}
+              handleSearchBarChange={handleSearchBarChange}
+              userListItemTheme={userListItemTheme}
+              error={error}
+            
+            />
         }
       </>
     </ThemeContext.Provider>

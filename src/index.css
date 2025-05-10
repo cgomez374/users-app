@@ -4,11 +4,6 @@
   box-sizing: border-box;
 }
 
-body {
-  background-color: black;
-  color: wheat;
-}
-
 .dark-mode {
   background-color: black;
   color: wheat;

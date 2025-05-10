@@ -13,6 +13,12 @@ main h1, main p {
   margin: 10px;
 }
 
+.loading-alert {
+  margin: 200px auto;
+  text-align: center;
+  font-size: 75px;
+}
+
 .list-container {
   display: flex;
   flex-direction: column;
